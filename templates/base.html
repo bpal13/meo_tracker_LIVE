@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css')}}" rel="stylesheet" />
+
+
+    {% block styles %}
+    <!-- Bootstrap CSS -->
+    {{ bootstrap.load_css() }}
+    {% endblock %}
+
+    <title>{% block title %} Tracker {% endblock %}</title>
+    {% endblock %}
+
+</head>
+<body class="page-body">
+
+    {% block navbar %}
+        <!--
+    <nav class="navbar navbar-expand-lg fw-bold">
+        <div class="container-fluid">
+          <a class="navbar-brand header-item text-light" href="#">HTM</a>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link header-item text-light" href="{{ url_for('home') }}">Nyilvantarto</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link header-item text-light" href="{{ url_for('scraps') }}">Selejtek</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link header-item text-light" href="#">Statisztika</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link header-item text-light" href="{{ url_for('add_tool') }}">Add tool</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link header-item text-light disabled" href="{{ url_for('import_excel') }}">FILL DB</a>
+              </li>
+      
+              {% if logged_in: %}
+              <li class="nav-item">
+                <a class="nav-link header-item text-light" href="{{ url_for('user_logout') }}">Logout</a>
+              </li>
+              {% endif %}
+      
+            </ul>
+      
+            <form class="d-flex" action="{{ url_for('search') }}" method="post" novalidate>
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+              <input class="form-control me-2" name="search" type="search" placeholder="Search by Tool ID" aria-label="Search">
+              <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+      -->
+      <nav class="navbar navbar-expand-lg fw-bold">
+        <div class="container-fluid">
+          <a class="navbar-brand text-light" href="#">MEO</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-light" aria-current="page" href="{{ url_for('home') }}">Nyilvantarto</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="{{ url_for('scraps') }}">Selejtek</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Statisztika</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="{{ url_for('add_tool') }}">Add tool</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link  text-light disabled" href="{{ url_for('import_excel') }}">FILL DB</a>
+              </li>
+
+              {% if logged_in: %}
+              <li class="nav-item">
+                <a class="nav-link text-light" href="{{ url_for('user_logout') }}">Logout</a>
+              </li>
+              {% endif %}
+
+            </ul>
+            <form class="d-flex" action="{{ url_for('search') }}" method="post" novalidate>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input class="form-control me-2" name="search" type="search" placeholder="Search by Tool ID" aria-label="Search">
+                <button class="btn btn-primary" type="submit">Search</button>
+              </form>
+          </div>
+        </div>
+      </nav>
+      {% endblock %}
+
+
+      <!-- Search filters -->
+      {% block filter %} {% endblock %}
+    <!-- Page content -->
+    {% block content %} {% endblock %}
+
+
+    <!-- Optional JavaScript -->
+    {% block scripts %}
+
+        {{ bootstrap.load_js() }}
+
+    {% endblock %}    
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %} Tracker - Modify {% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <h1> Adatok modositasa </h1>
+</div>
+    <div class="container-md">
+        <form action="{{ url_for('add_tool') }}" method="post" novalidate>
+            {{ form.csrf_token }}
+            <div class="row mt-4"><h1> Meroezkoz adatok </h1></div>
+            <div class="row mt-4">    
+                <div class="col form-floating m-3">
+                    {{ form.status(class_="form-control", id="floatingInput", placeholder="Gyarto") }}
+                    <label for="floatingInput">Gyarto</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Megnevezes") }}
+                    <label for="floatingPassword">Megnevezes</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Ezkoz tipusa") }}
+                    <label for="floatingPassword">Ezkoz tipusa</label>
+                </div>
+            </div>
+            <div class="row mt-4">    
+                <div class="col form-floating m-3">
+                    {{ form.status(class_="form-control", id="floatingInput", placeholder="Azonosito") }}
+                    <label for="floatingInput">Azonosito</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Gyari szam") }}
+                    <label for="floatingPassword">Gyari szam</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Mereshatar") }}
+                    <label for="floatingPassword">Mereshatar</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Pontossag") }}
+                    <label for="floatingPassword">Pontossag</label>
+                </div>
+            </div>
+    
+            <div class="row mt-4"><h1> Kalibralas adatok </h1></div>
+            <div class="row mt-4">    
+                <div class="col form-floating m-3">
+                    {{ form.status(class_="form-control", id="floatingInput", placeholder="Utolso kalibralas") }}
+                    <label for="floatingInput">Utolso kalibralas</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Kovetkezo kalibralas") }}
+                    <label for="floatingPassword">Kovetkezo kalibralas</label>
+                </div>
+            </div>
+            <div class="row mt-4">    
+                <div class="col form-floating m-3">
+                    {{ form.status(class_="form-control", id="floatingInput", placeholder="Megengedett elteres") }}
+                    <label for="floatingInput">Utolso kalibralas</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Mert elteres") }}
+                    <label for="floatingPassword">Kovetkezo kalibralas</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Minosites") }}
+                    <label for="floatingPassword">Minosites</label>
+                </div>
+            </div>
+            <div class="row mt-4">    
+                <div class="col form-floating m-3">
+                    {{ form.status(class_="form-control", id="floatingInput", placeholder="Kalibralo szemely neve") }}
+                    <label for="floatingInput">Kalibralo szemely neve</label>
+                </div>
+                <div class=" col form-floating m-3">
+                    {{ form.status_date(class_="form-control", id="floatingPassword", placeholder="Vizsgalati etalon azonosito") }}
+                    <label for="floatingPassword">Vizsgalati etalon azonosito</label>
+                </div>
+            </div>
+            <div class="row mt-4">
+    
+            </div>
+    
+              {{ form.submit(class_="btn btn-secondary") }}
+            </form>
+        
+    </div>
+{% endblock %}
+    

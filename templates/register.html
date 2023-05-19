@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %} Tracker - Register {% endblock %}
+
+{% block content %}
+<body>
+  <h1 class="title-text">Sign Up Page</h1>
+  <div class="login-window">
+
+    <form action="/register" method="POST" novalidate>
+      {{ form.csrf_token }}
+      <div class="form-div">
+        {{ form.email.label }}
+        <br>
+        {{ form.email }}
+      </div>
+
+      <div class="form-div">
+        {{ form.username.label }}
+        <br>
+        {{ form.username }}
+      </div>
+
+      <div class="form-div">
+        {{ form.password.label }}
+        <br>
+        {{ form.password }}
+      </div>
+
+      <div class="form-div">
+        {{ form.submit }}
+      </div>
+
+    </form>
+
+  </div>
+</body>
+{% endblock %}

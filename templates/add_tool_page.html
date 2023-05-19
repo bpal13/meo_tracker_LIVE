@@ -1,0 +1,92 @@
+{% extends "header.html" %}
+
+{% block title %} Tracker - Add tool {% endblock %}
+
+{% block content %}
+<div class="container-sm mt-4">
+    <form class="row g-3" action="{{ url_for('add_tool') }}" method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+        <div class="col-md-12 mb-2">
+            <h1>A muszer, meroezkoz adatai</h1>
+        </div>
+        <div class="col-md-6">
+          <label for="toolLoc" class="form-label">Tarolas helye</label>
+          <input type="text" class="form-control" name="tool_location" id="toolLoc" />
+        </div>
+        <div class="col-md-6">
+          <label for="toolID" class="form-label">Azonosito</label>
+          <input type="text" class="form-control" name="tool_id" id="toolID" />
+        </div>
+        <div class="col-md-4">
+          <label for="toolBrand" class="form-label">Gyarto</label>
+          <input type="text" class="form-control" name="tool_brand" id="toolBrand" />
+        </div>
+        <div class="col-md-4">
+          <label for="toolName" class="form-label">Megnevezes</label>
+          <select class="form-select" name="tool_names" id="toolName">
+          <option selected>Válassz...</option>
+          <option value="Tolómérő">Tolómérő</option>
+          <option value="Kengyeles mikrométer">Kengyeles mikrométer</option>
+          <option value="Furatmikrométer">Furatmikrométer</option>
+          <option value="Kengyeles mikrométer készlet">Kengyeles mikrométer készlet</option>
+          <option value="Mélységmérő mikrométer">Mélységmérő mikrométer</option>
+          <option value="Mélységmérő">Mélységmérő</option>
+          <option value="Furatmikrométer készlet">Furatmikrométer készlet</option>
+          <option value="Furatmikrométer">Furatmikrométer</option>
+          <option value="Mérőóra">Mérőóra</option>
+          <option value="Szögtapintós mérőóra">Szögtapintós mérőóra</option>
+          <option value="Derékszög">Derékszög</option>
+        </select>
+        </div>
+        <div class="col-md-4">
+        <label for="toolType" class="form-label">Tipus</label>
+        <select id="toolType" name="tool_type" class="form-select">
+          <option selected>Válassz...</option>
+          <option value="Digitális">Digitális</option>
+          <option value="Hagyományos">Hagyományos</option>
+          <option value="Órás">Órás</option>
+          <option value="Mérőórás">Mérőórás</option>
+          <option value="Talpas">Talpas</option>
+        </select>
+      </div>
+        <div class="col-md-4">
+          <label for="toolSerial" class="form-label">Gyari szam</label>
+          <input type="text" class="form-control" name="tool_serial" id="toolSerial" />
+        </div>
+        <div class="col-md-4">
+          <label for="toolAccuracy" class="form-label">Pontossag</label>
+          <input type="text" class="form-control" name="tool_accuracy" id="toolAccuracy" />
+        </div>
+        <div class="col-md-4">
+          <label for="toolRange" class="form-label">Mereshatar</label>
+          <input type="text" class="form-control" name="tool_range" id="toolRange" />
+        </div>
+        <div class="col-md-6">
+          <label for="toolDeviation" class="form-label">Megengedett elteres</label>
+          <input type="text" class="form-control" name="max_deviation" id="toolDeviation" />
+        </div>
+
+
+        <div class="col-md-4">
+          <label for="toolStatus" class="form-label">Statusz</label>
+          <input type="text" class="form-control" name="status" id="toolStatus" />
+        </div>
+        <div class="col-md-4">
+          <label for="toolStatusDate" class="form-label">Statusz Datum(ha selejt)</label>
+          <input type="text" class="form-control" name="status_date" id="toolStatusDate" />
+        </div>
+        <div class="col-md-12">
+          <label for="toolNotes" class="form-label">Megjegyzes</label>
+          <input type="text" class="form-control" name="notes" id="toolNotes" />
+        </div>
+
+
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Szerszam bevitel</button>
+        </div>
+      </form>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %} Tracker - Home {% endblock %}
+
+{% block content %}
+<!-- FILTER -->
+<div class="container-lg">
+
+  <div class="row mt-4 text-center p-1">
+      <h1> Meroezkoz nyilvantarto </h1>
+  </div>
+
+      <form  class="row  mt-2 p-1" action="{{ url_for('filter_by') }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+          <div class="col-sm-2">
+            <label class="text-light align-middle" for="tool_names">Szerszámok szurese:</label>
+          </div>
+          <div class="col-sm-3">
+              <select class="form-select" name="tool_names" id="tool_names">
+                  <option selected>Válassz...</option>
+                  <option value="Tolómérő">Tolómérő</option>
+                  <option value="Kengyeles mikrométer">Kengyeles mikrométer</option>
+                  <option value="Furatmikrométer">Furatmikrométer</option>
+                  <option value="Kengyeles mikrométer készlet">Kengyeles mikrométer készlet</option>
+                  <option value="Mélységmérő mikrométer">Mélységmérő mikrométer</option>
+                  <option value="Mélységmérő">Mélységmérő</option>
+                  <option value="Furatmikrométer készlet">Furatmikrométer készlet</option>
+                  <option value="Furatmikrométer">Furatmikrométer</option>
+                  <option value="Mérőóra">Mérőóra</option>
+                  <option value="Szögtapintós mérőóra">Szögtapintós mérőóra</option>
+                  <option value="Derékszög">Derékszög</option>
+              </select>
+          </div>
+          <div class="col-sm-1">
+            <input class="tool-button" type="submit" value="Szures">
+          </div>
+      </form>
+
+</div>
+
+<!-- CONTENT -->
+<div class="container-lg">
+    <div class="row">
+
+    {% for tool in tools %}
+        <div class="col-sm-6 mb-3 mt-3">
+
+          <div class="card card-bg text-dark">
+            <div class="card-header">
+                <h5 class="card-title">{{ tool.tool_brand }} {{ tool.tool_name }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                <div class="col">
+                    <p class="card-text"> Tarolas helye: {{ tool.tool_location }} </p>
+                    <p class="card-text"> Ezkoz Statusz: {{ tool.status }} </p>
+                </div>
+                <div class="col">
+                    <p class="card-text"> Azonosito: {{ tool.tool_id }} </p>
+                    <p class="card-text"> Kalibralas:  </p>
+                </div>
+            </div>
+              <a href="{{ url_for('tool_details', tool_id= tool.id) }}"><button class="tool-button shadow mt-2" type="button" > Tool details</button></a>
+              <a href="{{ url_for('modify_tool', tool_id= tool.id) }}"><button class="tool-button shadow mt-2" type="button" > Modify tool</button></a>
+              <a href="#"><button class="delete-button shadow mt-2" type="button" > Delete Tool</button></a>  
+
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %} Tracker - Calibration {% endblock %}
+
+{% block content %}
+    <div class="container-md">
+        <form action="" method="post" novalidate>
+            {{ form.csrf_token }}
+
+            {{ form.calibration_date.label }}
+            {{ form.calibration_date }}
+
+            {{ form.next_calibration.label }}
+            {{ form.next_calibration }}
+
+            {{ form.temperature.label }}
+            {{ form.temperature }}
+
+            {{ form.calibration_by.label }}
+            {{ form.calibration_by }}
+
+            {{ form.rating.label }}
+            {{ form.rating }}
+
+            {{ form.actual_deviation.label }}
+            {{ form.actual_deviation }}
+
+            {{ form.etalon.label }}
+            {{ form.etalon }}
+
+            {{ form.KULSO_I_A.label }}
+            {{ form.KULSO_I_A }}
+
+            {{ form.KULSO_II_A.label }}
+            {{ form.KULSO_II_A }}
+
+            {{ form.KULSO_III_A.label }}
+            {{ form.KULSO_III_A }}
+
+            {{ form.KULSO_I_B.label }}
+            {{ form.KULSO_I_B }}
+            
+            {{ form.KULSO_II_B.label }}
+            {{ form.KULSO_II_B }}
+
+            {{ form.KULSO_III_B.label }}
+            {{ form.KULSO_III_B }}
+
+            {{ form.BELSO_I_A.label }}
+            {{ form.BELSO_I_A }}
+
+            {{ form.BELSO_II_A.label }}
+            {{ form.BELSO_II_A }}
+
+            {{ form.BELSO_III_A.label }}
+            {{ form.BELSO_III_A }}
+
+            {{ form.BELSO_I_B.label }}
+            {{ form.BELSO_I_B }}
+
+            {{ form.BELSO_II_B.label }}
+            {{ form.BELSO_II_B }}
+
+            {{ form.BELSO_III_B.label }}
+            {{ form.BELSO_III_B }}
+
+            {{ form.submit }}
+        </form>
+
+    </div>
+{% endblock %}
