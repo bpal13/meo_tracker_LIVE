@@ -8,7 +8,20 @@
   <div class="login-window">
 
     <form action="/register" method="POST" novalidate>
-      {{ form.csrf_token }}
+      {{ form.hidden_tag() }}
+
+      <!-- FLASH ERROR MESSAGES -->   
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+        </ul>
+      {% endif %}
+      {% endwith %}
+      <!-------------------------->
+
       <div class="form-div">
         {{ form.email.label }}
         <br>
@@ -19,6 +32,12 @@
         {{ form.username.label }}
         <br>
         {{ form.username }}
+      </div>
+
+      <div class="form-div">
+        {{ form.htm_id.label }}
+        <br>
+        {{ form.htm_id }}
       </div>
 
       <div class="form-div">

@@ -8,7 +8,7 @@
 </div>
     <div class="container-md">
         <form action="{{ url_for('add_tool') }}" method="post" novalidate>
-            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
             <div class="row mt-4"><h1> Meroezkoz adatok </h1></div>
             <div class="row mt-4">    
                 <div class="col form-floating m-3">

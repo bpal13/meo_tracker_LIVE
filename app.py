@@ -3,9 +3,11 @@ from flask import Flask, render_template, url_for, redirect, flash, request
 from flask_bootstrap import Bootstrap5
 from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import AddToolForm, LoginForm, RegisterForm, AddCalibrationForm
+from psw_check import check_password
 import csv
 import datetime
 
@@ -46,8 +48,10 @@ class Tools(db.Model):
 class Calibrations(db.Model):
     __tablename__ = "calibrations"
     id = db.Column(db.Integer, primary_key=True)
+
     # Szerszam azonosito a 'tools' tablabol
     parent_id = db.Column(db.Integer, db.ForeignKey("tools.id"))
+
     calibration_by = db.Column(db.String)  # Kalibralo szemely neve
     calibration_date = db.Column(db.DateTime)  # Kalibralas idopontja
     next_calibration = db.Column(db.DateTime)  # Kovetkezo kalibralas idopontja
@@ -81,9 +85,15 @@ class User(UserMixin, db.Model):
     still_employed = db.Column(db.Boolean, default=True)
 
 
+class Roles(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    role = db.Column(db.String)
+
+
 # Create the 'tools' and 'users' database
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 
 # Login Manager
@@ -93,11 +103,11 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def user_loader(user_id):
-    # return User.query.get(user_id)
-    return User.query.filter_by(id=user_id).first()
+    return db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one()
+
+# LOGIN PAGE -- REDIRECT TO HOMEPAGE IF LOGGED IN
 
 
-# INDEX LOGIN PAGE -- REDIRECT TO HOMEPAGE IF LOGGED IN
 @app.route("/", methods=["GET", "POST"])
 def index():
     form = LoginForm()
@@ -107,16 +117,14 @@ def index():
     # print(form.errors)
 
     if form.validate_on_submit():
-        user = db.session.query(User).filter_by(
-            username=form.username.data).first()
+        user = db.session.execute(db.select(User).filter_by(
+            username=form.username.data)).scalar_one_or_none()
         if not user:
             flash("That username does not exist. Please try again.")
-            print("usr")
             return redirect(url_for('index'))
 
         elif not check_password_hash(user.password, form.password.data):
             flash("Incorrect password. Please try again.")
-            print("psw")
             return redirect(url_for('index'))
 
         else:
@@ -144,8 +152,9 @@ def scraps():
         db.select(Tools).filter_by(status="Selejt")).scalars()
     return render_template('index.html', tools=tools, logged_in=current_user.is_authenticated)
 
+# REGISTER USER PAGE v2.0
 
-# REGISTER USER PAGE
+
 @app.route("/register", methods=["GET", "POST"])
 def register_user():
     form = RegisterForm()
@@ -155,22 +164,29 @@ def register_user():
     # print(form.errors)
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = db.session.execute(
+            db.select(User).filter_by(email=form.email.data)).scalar_one_or_none()
         if user:
             flash("You've already signed up with that email. Sign in instead.")
-            return redirect(url_for('login_page'))
+            return redirect(url_for('index'))
 
-        new_user = User(email=form.email.data,
-                        username=form.username.data,
-                        password=generate_password_hash(
-                            form.password.data, "pbkdf2:sha256", 8),
-                        registered=datetime.date.today(),
-                        last_login=datetime.date.today())
-        if new_user:
-            db.session.add(new_user)
-            db.session.commit()
-            login_user(new_user)
-            return redirect(url_for('home'))
+        if not user:
+            response = check_password(form.password.data)
+            if response == True:
+                new_user = User(email=form.email.data,
+                                username=form.username.data,
+                                password=generate_password_hash(
+                                    form.password.data, "pbkdf2:sha256", 8),
+                                registered=datetime.date.today(),
+                                last_login=datetime.date.today())
+
+                db.session.add(new_user)
+                db.session.commit()
+                login_user(new_user)
+                return redirect(url_for('home'))
+            else:
+                flash(response)
+                return redirect(url_for('register_user'))
 
         return redirect(url_for('home'))
 
@@ -205,19 +221,20 @@ def add_tool():
 @app.route("/delete/<int:tool_id>")
 @login_required
 def remove_record(tool_id):
-    record_to_remove = Tools.query.filter_by(id=tool_id).first()
+    record_to_remove = db.session.execute(
+        db.select(Tools).filter_by(id=tool_id)).scalar_one()
     if record_to_remove:
         db.session.delete(record_to_remove)
         db.session.commit()
         return redirect(url_for('home'))
 
+
 # REMOVE SELECTED CELIBRATION FROM DB
-
-
 @app.route("/delete-calib/<int:tool_id>/<int:cal_id>")
 @login_required
 def delete_calibration(tool_id, cal_id):
-    record_to_remove = Calibrations.query.filter_by(id=cal_id).first()
+    record_to_remove = db.session.execute(
+        db.select(Calibrations).filter_by(id=cal_id)).scalar_one()
     if record_to_remove:
         db.session.delete(record_to_remove)
         db.session.commit()
@@ -229,8 +246,10 @@ def delete_calibration(tool_id, cal_id):
 @login_required
 @app.route("/modify/<int:tool_id>")
 def modify_tool(tool_id):
+    selected_tool = db.session.execute(
+        db.select(Tools).filter_by(id=tool_id)).scalar_one()
     form = AddToolForm()
-    return render_template('modify_tool.html', form=form, logged_in=current_user.is_authenticated)
+    return render_template('modify_tool.html', tool=selected_tool, form=form, logged_in=current_user.is_authenticated)
 
 
 @app.route("/logout")
@@ -267,12 +286,13 @@ def import_excel():
 @app.route("/details/<int:tool_id>")
 @login_required
 def tool_details(tool_id):
-    tool_data = Tools.query.filter_by(id=tool_id).first()
-    calibrations = Calibrations.query.filter_by(parent_id=tool_data.id).all()
+    tool_data = db.session.execute(
+        db.select(Tools).filter_by(id=tool_id)).scalar_one()
+
+    calibrations = db.session.execute(
+        db.select(Calibrations).filter_by(parent_id=tool_id)).scalars()
+
     if tool_data:
-
-        print(type(calibrations))
-
         return render_template('details.html', tool_data=tool_data, calibrations=calibrations, logged_in=current_user.is_authenticated)
 
 
@@ -281,7 +301,8 @@ def tool_details(tool_id):
 @login_required
 def add_calibration(tool_id):
     form = AddCalibrationForm()
-    owner = Tools.query.filter_by(id=tool_id).first()
+    owner = db.session.execute(
+        db.select(Tools).filter_by(id=tool_id)).scalar_one()
 
     # Debug
     # print(form.validate_on_submit())
@@ -321,7 +342,8 @@ def add_calibration(tool_id):
 @login_required
 def search():
     if request.method == "POST":
-        result = Tools.query.filter_by(tool_id=request.form["search"])
+        result = db.session.execute(
+            db.select(Tools).filter_by(tool_id=request.form["search"])).scalars()
 
         return render_template('search_results.html', results=result, logged_in=current_user.is_authenticated)
 
@@ -331,7 +353,8 @@ def search():
 @login_required
 def filter_by():
     if request.method == "POST":
-        result = Tools.query.filter_by(tool_name=request.form["tool_names"])
+        result = db.session.execute(db.select(Tools).filter_by(
+            tool_name=request.form["tool_names"])).scalars()
 
         return render_template('search_results.html', results=result, logged_in=current_user.is_authenticated)
 

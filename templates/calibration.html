@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container-md">
         <form action="" method="post" novalidate>
-            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
 
             {{ form.calibration_date.label }}
             {{ form.calibration_date }}

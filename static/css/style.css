@@ -46,6 +46,10 @@ h1{
   background-color: #c7d5e0;
 }
 
+.hidden {
+  display: none;
+}
+
 .flex-container{
   display: flex;
   flex-direction: column;

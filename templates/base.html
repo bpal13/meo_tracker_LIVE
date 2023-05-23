@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+    <!-- Metarial Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/style.css')}}" rel="stylesheet" />
 
@@ -22,48 +24,9 @@
 <body class="page-body">
 
     {% block navbar %}
-        <!--
-    <nav class="navbar navbar-expand-lg fw-bold">
-        <div class="container-fluid">
-          <a class="navbar-brand header-item text-light" href="#">HTM</a>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link header-item text-light" href="{{ url_for('home') }}">Nyilvantarto</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link header-item text-light" href="{{ url_for('scraps') }}">Selejtek</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link header-item text-light" href="#">Statisztika</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link header-item text-light" href="{{ url_for('add_tool') }}">Add tool</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link header-item text-light disabled" href="{{ url_for('import_excel') }}">FILL DB</a>
-              </li>
-      
-              {% if logged_in: %}
-              <li class="nav-item">
-                <a class="nav-link header-item text-light" href="{{ url_for('user_logout') }}">Logout</a>
-              </li>
-              {% endif %}
-      
-            </ul>
-      
-            <form class="d-flex" action="{{ url_for('search') }}" method="post" novalidate>
-              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-              <input class="form-control me-2" name="search" type="search" placeholder="Search by Tool ID" aria-label="Search">
-              <button class="btn btn-primary" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-      </nav>
-      -->
       <nav class="navbar navbar-expand-lg fw-bold">
         <div class="container-fluid">
-          <a class="navbar-brand text-light" href="#">MEO</a>
+          <a class="navbar-brand text-light" href="{{ url_for('home') }}">MEO</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -89,6 +52,13 @@
               <li class="nav-item">
                 <a class="nav-link text-light" href="{{ url_for('user_logout') }}">Logout</a>
               </li>
+              {% else: %}
+              <li class="nav-item">
+                <a class="nav-link text-light" href="{{ url_for('index') }}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="{{ url_for('register_user') }}">Sign up</a>
+              </li>
               {% endif %}
 
             </ul>
@@ -102,9 +72,6 @@
       </nav>
       {% endblock %}
 
-
-      <!-- Search filters -->
-      {% block filter %} {% endblock %}
     <!-- Page content -->
     {% block content %} {% endblock %}
 

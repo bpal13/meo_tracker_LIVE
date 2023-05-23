@@ -3,41 +3,41 @@
 {% block title %} Tracker - Home {% endblock %}
 
 {% block content %}
-<!-- FILTER -->
-<div class="container-lg">
+      <!-- FILTER -->
+      <div class="container-lg">
 
-  <div class="row mt-4 text-center p-1">
-      <h1> Meroezkoz nyilvantarto </h1>
-  </div>
-
-      <form  class="row  mt-2 p-1" action="{{ url_for('filter_by') }}" method="post">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
-          <div class="col-sm-2">
-            <label class="text-light align-middle" for="tool_names">Szerszámok szurese:</label>
-          </div>
-          <div class="col-sm-3">
-              <select class="form-select" name="tool_names" id="tool_names">
-                  <option selected>Válassz...</option>
-                  <option value="Tolómérő">Tolómérő</option>
-                  <option value="Kengyeles mikrométer">Kengyeles mikrométer</option>
-                  <option value="Furatmikrométer">Furatmikrométer</option>
-                  <option value="Kengyeles mikrométer készlet">Kengyeles mikrométer készlet</option>
-                  <option value="Mélységmérő mikrométer">Mélységmérő mikrométer</option>
-                  <option value="Mélységmérő">Mélységmérő</option>
-                  <option value="Furatmikrométer készlet">Furatmikrométer készlet</option>
-                  <option value="Furatmikrométer">Furatmikrométer</option>
-                  <option value="Mérőóra">Mérőóra</option>
-                  <option value="Szögtapintós mérőóra">Szögtapintós mérőóra</option>
-                  <option value="Derékszög">Derékszög</option>
-              </select>
-          </div>
-          <div class="col-sm-1">
-            <input class="tool-button" type="submit" value="Szures">
-          </div>
-      </form>
-
-</div>
+        <div class="row mt-4 text-center p-1">
+            <h1> Meroezkoz nyilvantarto </h1>
+        </div>
+      
+            <form  class="row  mt-2 p-1" action="{{ url_for('filter_by') }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      
+                <div class="col-sm-2">
+                  <label class="text-light align-middle" for="tool_names">Szerszámok szurese:</label>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-select" name="tool_names" id="tool_names">
+                        <option selected>Válassz...</option>
+                        <option value="Tolómérő">Tolómérő</option>
+                        <option value="Kengyeles mikrométer">Kengyeles mikrométer</option>
+                        <option value="Furatmikrométer">Furatmikrométer</option>
+                        <option value="Kengyeles mikrométer készlet">Kengyeles mikrométer készlet</option>
+                        <option value="Mélységmérő mikrométer">Mélységmérő mikrométer</option>
+                        <option value="Mélységmérő">Mélységmérő</option>
+                        <option value="Furatmikrométer készlet">Furatmikrométer készlet</option>
+                        <option value="Furatmikrométer">Furatmikrométer</option>
+                        <option value="Mérőóra">Mérőóra</option>
+                        <option value="Szögtapintós mérőóra">Szögtapintós mérőóra</option>
+                        <option value="Derékszög">Derékszög</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                  <input class="tool-button" type="submit" value="Szures">
+                </div>
+            </form>
+      
+      </div>
 
 <!-- CONTENT -->
 <div class="container-lg">
@@ -64,7 +64,25 @@
               <a href="{{ url_for('tool_details', tool_id= tool.id) }}"><button class="tool-button shadow mt-2" type="button" > Tool details</button></a>
               <a href="{{ url_for('modify_tool', tool_id= tool.id) }}"><button class="tool-button shadow mt-2" type="button" > Modify tool</button></a>
               <a href="#"><button class="delete-button shadow mt-2" type="button" > Delete Tool</button></a>  
+            </div>
+          </div>
+        </div>
 
+        <!-- MODAL -->
+        <div class="modal hidden">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Biztosan torlod az ezkozt?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Torles</button>
+              </div>
             </div>
           </div>
         </div>
@@ -72,5 +90,6 @@
       {% endfor %}
 
 
+</div>
 </div>
 {% endblock %}
