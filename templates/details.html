@@ -103,7 +103,6 @@
             <table class="table table-light table-hover mt-2">
                 <thead class="table-secondary">
                     <tr>
-                        <th>#</th>
                         <th>Kalibralas idopontja</th>
                         <th>Kovetkezo kalibralas</th>
                         <th>Homerseklet</th>
@@ -116,15 +115,15 @@
                         <th>III.b</th>
                         <th>Minosites</th>
                         <th>Kalibralast vegezte</th>
+                        <th>Hasabkeszlet</th>
                         <th>Torles</th>
                     </tr>
                 </thead>
                 
                 <tbody>
                     <tr class="table align-middle">
-                        <td>{{ row.id }}</td>
-                        <td>{{ row.calibration_date }}</td>
-                        <td>{{ row.next_calibration }}</td>
+                        <td>{{ moment(row.calibration_date).format('LL') }}</td>
+                        <td>{{ moment(row.next_calibration).format('LL') }}</td>
                         <td>{{ row.temperature }}</td>
                         <td>KULSO <br> BELSO</td>
                         <td>{{ row.KULSO_I_A }} <br> {{ row.BELSO_I_A }}</td>
@@ -135,6 +134,7 @@
                         <td>{{ row.KULSO_III_B }} <br> {{ row.BELSO_III_B }}</td>
                         <td>{{ row.rating }}</td>
                         <td>{{ row.calibration_by }}</td>
+                        <td>{{ row.etalon }}</td>
                         <td> <a href="{{ url_for('delete_calibration', cal_id=row.id, tool_id=tool_data.id) }}"> X </a> </td>
                     </tr>
                 </tbody>

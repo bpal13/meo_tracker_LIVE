@@ -9,14 +9,10 @@
         <div class="row mt-4 text-center p-1">
             <h1> Meroezkoz nyilvantarto </h1>
         </div>
-      
-            <form  class="row  mt-2 p-1" action="{{ url_for('filter_by') }}" method="post">
+        <div class="d-flex flex-row flex-wrap">
+          <div class="flex-md-fill my-2">    
+            <form  class="d-flex col-md-6" action="{{ url_for('filter_by') }}" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-      
-                <div class="col-sm-2">
-                  <label class="text-light align-middle" for="tool_names">Szerszámok szurese:</label>
-                </div>
-                <div class="col-sm-3">
                     <select class="form-select" name="tool_names" id="tool_names">
                         <option selected>Válassz...</option>
                         <option value="Tolómérő">Tolómérő</option>
@@ -31,12 +27,20 @@
                         <option value="Szögtapintós mérőóra">Szögtapintós mérőóra</option>
                         <option value="Derékszög">Derékszög</option>
                     </select>
-                </div>
-                <div class="col-sm-1">
-                  <input class="tool-button" type="submit" value="Szures">
-                </div>
+
+                <button class="tool-button ms-2" type="submit">Szures</button>
+
             </form>
-      
+          </div>
+      <!-- SEARCH BAR -->
+      <div class="flex-md-fill my-2">
+        <form class="d-flex col-md-6" action="{{ url_for('search') }}" method="post" novalidate>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input class="form-control me-2" name="search" type="search" placeholder="Search by Tool ID" aria-label="Search">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
       </div>
 
 <!-- CONTENT -->
@@ -53,12 +57,20 @@
             <div class="card-body">
                 <div class="row">
                 <div class="col">
-                    <p class="card-text"> Tarolas helye: {{ tool.tool_location }} </p>
-                    <p class="card-text"> Ezkoz Statusz: {{ tool.status }} </p>
+                    <p class="card-text text-sm-start ms-5 p-1"><span class="material-icons align-middle">
+                      location_on
+                      </span>  {{ tool.tool_location }} </p>
+                    <p class="card-text text-sm-start ms-5 p-1"><span class="material-icons align-middle">
+                      assignment
+                      </span>  {{ tool.status }} </p>
                 </div>
                 <div class="col">
-                    <p class="card-text"> Azonosito: {{ tool.tool_id }} </p>
-                    <p class="card-text"> Kalibralas:  </p>
+                    <p class="card-text text-sm-start ms-5 p-1"><span class="material-icons align-middle">
+                      turned_in
+                      </span>  {{ tool.tool_id }} </p>
+                    <p class="card-text text-sm-start ms-5 p-1"><span class="material-icons align-middle">
+                      assignment_turned_in
+                      </span>   {{ moment(tool.valid_until).format('LL') }}</p>
                 </div>
             </div>
               <a href="{{ url_for('tool_details', tool_id= tool.id) }}"><button class="tool-button shadow mt-2" type="button" > Tool details</button></a>
@@ -92,4 +104,7 @@
 
 </div>
 </div>
+
+
+
 {% endblock %}

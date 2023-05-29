@@ -4,7 +4,8 @@ from wtforms.validators import DataRequired, Email
 
 
 class AddToolForm(FlaskForm):
-    status = StringField('Ezkoz status', validators=[DataRequired()])
+    status = SelectField("Ezkoz Status", choices=[
+                         "Kalibralt", "Lejart", "Selejt"], validators=[DataRequired()])
     status_date = StringField('Status Datum')
     tool_id = StringField('Azonosito', validators=[DataRequired()])
     tool_name = StringField('Megnevezes', validators=[DataRequired()])
@@ -37,9 +38,9 @@ class LoginForm(FlaskForm):
 class AddCalibrationForm(FlaskForm):
     parent_tool = StringField("Kalibralt szerszam azonosito")
     calibration_date = DateField(
-        "Kalibralas idopontja", validators=[DataRequired()])
+        "Kalibralas idopontja", validators=[DataRequired()], format='%Y-%m-%d')
     next_calibration = DateField(
-        "Kovetkezo kalibracio idopontja", validators=[DataRequired()])
+        "Kovetkezo kalibracio idopontja", validators=[DataRequired()], format='%Y-%m-%d')
     temperature = IntegerField(
         "Kornyezeti Homerseklet", validators=[DataRequired()])
     calibration_by = StringField(

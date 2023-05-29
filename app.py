@@ -3,11 +3,12 @@ from flask import Flask, render_template, url_for, redirect, flash, request
 from flask_bootstrap import Bootstrap5
 from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
+from flask_moment import Moment
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import AddToolForm, LoginForm, RegisterForm, AddCalibrationForm
-from psw_check import check_password
+from checks import check_password, get_status_data
 import csv
 import datetime
 
@@ -15,18 +16,19 @@ import datetime
 app = Flask(__name__)
 csrf = CSRFProtect(app)
 bootstrap = Bootstrap5(app)
-
-
 db = SQLAlchemy()
+
+
 app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tools.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test_tools.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 csrf.init_app(app)
+migrate = Migrate(app, db)
+moment = Moment(app)
+
 
 # 'tools' and 'users' database structure
-
-
 class Tools(db.Model):
     __tablename__ = "tools"
     id = db.Column(db.Integer, primary_key=True)
@@ -41,6 +43,8 @@ class Tools(db.Model):
     tool_accuracy = db.Column(db.String(255))  # Pontossag
     tool_range = db.Column(db.String(255))  # Mereshatar #
     max_deviation = db.Column(db.String(255))  # Megengedett elteres
+    visibility = db.Column(db.Boolean, default=True)  # TODO Lathatosag
+    valid_until = db.Column(db.DateTime)
     notes = db.Column(db.String(255))  # Megjegyzes
     calibs = db.relationship("Calibrations", backref="parent_tool")
 
@@ -85,6 +89,7 @@ class User(UserMixin, db.Model):
     still_employed = db.Column(db.Boolean, default=True)
 
 
+# TODO Create the relationship between 'users' and 'roles'
 class Roles(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
@@ -105,9 +110,8 @@ login_manager.init_app(app)
 def user_loader(user_id):
     return db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one()
 
+
 # LOGIN PAGE -- REDIRECT TO HOMEPAGE IF LOGGED IN
-
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     form = LoginForm()
@@ -152,9 +156,8 @@ def scraps():
         db.select(Tools).filter_by(status="Selejt")).scalars()
     return render_template('index.html', tools=tools, logged_in=current_user.is_authenticated)
 
+
 # REGISTER USER PAGE v2.0
-
-
 @app.route("/register", methods=["GET", "POST"])
 def register_user():
     form = RegisterForm()
@@ -357,6 +360,43 @@ def filter_by():
             tool_name=request.form["tool_names"])).scalars()
 
         return render_template('search_results.html', results=result, logged_in=current_user.is_authenticated)
+
+
+# Calibration  check
+@app.route('/check')
+@login_required
+def check_calibration_dates():
+    tools = db.session.execute(db.select(Tools)).scalars()
+    for row in tools:
+        calibs = db.session.execute(
+            db.select(Calibrations).filter_by(parent_id=row.id)).scalars()
+        result = list(calibs)[-1]
+        calib_date = result.next_calibration
+
+        if datetime.date.today() >= calib_date.date():
+
+            row.status = "Lejárt kalibrálás"
+            row.valid_until = calib_date.date()
+            db.session.commit()
+        else:
+            row.status = "Kalibrált"
+            row.valid_until = calib_date.date()
+            db.session.commit()
+
+    return redirect(url_for('home'))
+
+
+@app.route("/statistics")
+@login_required
+def show_stats():
+    tools = db.session.execute(db.select(Tools)).scalars()
+
+    response = get_status_data(tools=tools)
+
+    return render_template("stats.html",
+                           labels=response[0],
+                           data=response[1],
+                           logged_in=current_user.is_authenticated)
 
 
 # Error handling

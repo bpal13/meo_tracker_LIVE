@@ -8,9 +8,17 @@
   
     <!-- Metarial Symbols -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+      
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/style.css')}}" rel="stylesheet" />
 
+    <!-- CHARTS.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
+    {{ moment.include_moment() }}
+    {{ moment.locale(auto_detect=True) }}
 
     {% block styles %}
     <!-- Bootstrap CSS -->
@@ -39,13 +47,13 @@
                 <a class="nav-link text-light" href="{{ url_for('scraps') }}">Selejtek</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-light" href="#">Statisztika</a>
+                <a class="nav-link text-light" href="{{ url_for('show_stats') }}">Statisztika</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-light" href="{{ url_for('add_tool') }}">Add tool</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link  text-light disabled" href="{{ url_for('import_excel') }}">FILL DB</a>
+                <a class="nav-link  text-light" href="{{ url_for('check_calibration_dates') }}">CHECK DATES</a>
               </li>
 
               {% if logged_in: %}
@@ -62,11 +70,6 @@
               {% endif %}
 
             </ul>
-            <form class="d-flex" action="{{ url_for('search') }}" method="post" novalidate>
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <input class="form-control me-2" name="search" type="search" placeholder="Search by Tool ID" aria-label="Search">
-                <button class="btn btn-primary" type="submit">Search</button>
-              </form>
           </div>
         </div>
       </nav>

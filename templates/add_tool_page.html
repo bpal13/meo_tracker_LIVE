@@ -70,7 +70,12 @@
 
         <div class="col-md-4">
           <label for="toolStatus" class="form-label">Statusz</label>
-          <input type="text" class="form-control" name="status" id="toolStatus" />
+          <select id="toolStatus" name="status" class="form-select">
+            <option selected>Válassz...</option>
+            <option value="Kalibrált">Kalibrált</option>
+            <option value="Lejárt kalibrálás">Lejárt kalibrálás</option>
+            <option value="Selejt">Selejt</option>
+          </select>
         </div>
         <div class="col-md-4">
           <label for="toolStatusDate" class="form-label">Statusz Datum(ha selejt)</label>

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %} Tracker - Tool Stats {% endblock %}
+
+{% block content %}
+<div style="height: 50vh; width: 40%;">
+    <canvas id="barChart"></canvas>
+</div>
+
+<div style="height: 50vh; width: 40%;">
+    <canvas id="barChartTwo"></canvas>
+</div>
+
+<script>
+    const ctx = document.getElementById('barChart').getContext('2d');
+    const barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ labels | safe }},
+            datasets: [
+                {
+                    label: 'Szerszamok Statusza',
+                    data: {{ data | safe }},
+                    backgroundColor: "rgb(133, 97, 197)",
+                    borderColor: "rgb(133, 97, 197)",
+                }
+            ]
+        },
+        options: {
+            responsive: true
+        }
+    });
+    </script>
+    <script>
+        const context = document.getElementById('barChartTwo').getContext('2d');
+        const barChartTwo = new Chart(context, {
+            type: 'bar',
+            data: {
+                labels: {{ labels | safe }},
+                datasets: [
+                    {
+                        label: 'Szerszamok helyek szerint',
+                        data: {{ data | safe }},
+                        backgroundColor: "rgb(133, 97, 197)",
+                        borderColor: "rgb(133, 97, 197)",
+                    }
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        });
+        </script>
+{% endblock %}
